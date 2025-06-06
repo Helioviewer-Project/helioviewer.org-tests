@@ -20,8 +20,8 @@ test("Event viewer dialog menu should not overflow with tabs", async ({ page }) 
   await hv.SetObservationDateTime("2021/05/31", "00:01:29");
 
   // Action 4: View CCMC CME events
-  await expect(page.locator("#tree_CCMC").getByRole("link", { name: "CME" })).toBeVisible();
-  await page.locator("#tree_CCMC").getByRole("link", { name: "CME" }).click();
+  await expect(page.getByTestId(`event-tree-checkbox-CCMC>>DONKI>>CME`)).toBeVisible();
+  await page.getByTestId(`event-tree-checkbox-CCMC>>DONKI>>CME`).click();
 
   // Action 5: Click Matching Marker
   await expect(page.locator("#marker_2021-05-30T163600-CME-001")).toBeVisible();

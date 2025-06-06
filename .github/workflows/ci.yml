@@ -77,14 +77,14 @@ jobs:
           repository: helioviewer-project/helioviewer.org
           submodules: true
           path: "helioviewer.org"
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'main' }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || format('refs/pull/{0}/head', '673')  || 'main' }}
 
       - name: Checkout the Helioviewer API code being tested
         uses: actions/checkout@v4
         with:
           repository: 'helioviewer-project/api'
           path: 'api'
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || 'main' }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || format('refs/pull/{0}/head', '436') || 'main' }}
       - name: Print current directory
         run: |
           echo $(pwd)
