@@ -315,7 +315,12 @@ class Helioviewer implements DesktopInterface {
     await this.page.waitForFunction(() => document.getElementById("loading")?.style.display == "none", null, {
       timeout: 60000
     });
+
     await this.WaitForImageLoad();
+
+    if (await this.page.isVisible('#EventLayerAccordion-Container')) {
+        await this.page.waitForFunction(() => !document.querySelector(".event-tree-container-loader"), null , { timeout: 50000});
+    }
   }
 
   /**
