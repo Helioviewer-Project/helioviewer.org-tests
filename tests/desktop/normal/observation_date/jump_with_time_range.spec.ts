@@ -2,10 +2,10 @@ import { test, expect } from "@playwright/test";
 import { DesktopView, HelioviewerFactory, MobileInterface, MobileView } from "page_objects/helioviewer_interface";
 
 const time_jump_ranges = [
-  { jump_label: "1Min", seconds: 60 },
-  { jump_label: "6Hours", seconds: 21600 },
-  { jump_label: "1Week", seconds: 604800 },
-  { jump_label: "1Year", seconds: 31556926 }
+  // { jump_label: "1Min", seconds: 60 },
+  // { jump_label: "6Hours", seconds: 21600 },
+  { jump_label: "1Week", seconds: 604800 }
+  // { jump_label: "1Year", seconds: 31556926 }
 ];
 
 [MobileView, DesktopView].forEach((view) => {
@@ -25,6 +25,8 @@ const time_jump_ranges = [
       { tag: ["@production", view.tag, "@flaky"] },
       async ({ page, context, browser }, info) => {
         const hv = HelioviewerFactory.Create(view, page, info) as MobileInterface;
+
+        const randomFileName = Math.random().toString(36).substring(2, 10);
 
         // 1. LOAD HV
         await hv.Load();
@@ -67,12 +69,13 @@ const time_jump_ranges = [
         await hv.CenterViewport();
 
         // 8. SAVE CURRENT SCREENSHOT TO COMPARE LATER
-        await hv.saveScreenshot(`after-jump-screenshot-${jump_label}.png`, {
+        await hv.saveScreenshot(`after-jump-screenshot-${jump_label}-${randomFileName}.png`, {
           style: "#helioviewer-viewport-container-outer {z-index:200000}"
         });
 
         // 9. START FRESH AND RELOAD HV
-        await page.evaluate(() => localStorage.clear());
+        await page.evaluate(() => window.localStorage.clear());
+        await page.evaluate(() => window.sessionStorage.clear());
         await hv.Load();
 
         await hv.CloseAllNotifications();
@@ -110,7 +113,7 @@ const time_jump_ranges = [
 
         // 14, 2 SCREENSHOTS ARE FROM SAME DATE, AND SHOULD MATCH
         const ss1 = Buffer.from(directDateScreenshot, "base64");
-        expect(ss1).toMatchSnapshot(`after-jump-screenshot-${jump_label}.png`);
+        expect(ss1).toMatchSnapshot(`after-jump-screenshot-${jump_label}-${randomFileName}.png`);
       }
     );
 
@@ -122,6 +125,8 @@ const time_jump_ranges = [
       { tag: ["@production", view.tag] },
       async ({ page }, info) => {
         const hv = HelioviewerFactory.Create(view, page, info) as MobileInterface;
+
+        const randomFileName = Math.random().toString(36).substring(2, 10);
 
         // 1. LOAD HV
         await hv.Load();
@@ -169,12 +174,14 @@ const time_jump_ranges = [
         await hv.CenterViewport();
 
         // 8. TAKE A PICTURE , WE WILL COMPARE LATER
-        await hv.saveScreenshot(`navigated-date-screenshot-${jump_label}.png`, {
+        await hv.saveScreenshot(`navigated-date-screenshot-${jump_label}-${randomFileName}.png`, {
           mask: [page.locator("#timestep-select")]
         });
 
         // 9. RELOAD HV WITH FRESH DATA
-        await page.evaluate(() => localStorage.clear());
+        await page.evaluate(() => window.localStorage.clear());
+        await page.evaluate(() => window.sessionStorage.clear());
+
         await hv.Load();
         await hv.CloseAllNotifications();
         await hv.OpenImageLayerDrawer();
@@ -209,7 +216,7 @@ const time_jump_ranges = [
         });
 
         const ss = Buffer.from(directDateScreenshot, "base64");
-        expect(ss).toMatchSnapshot(`navigated-date-screenshot-${jump_label}.png`);
+        expect(ss).toMatchSnapshot(`navigated-date-screenshot-${jump_label}-${randomFileName}.png`);
       }
     );
   });

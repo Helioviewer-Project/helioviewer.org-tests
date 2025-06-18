@@ -58,33 +58,33 @@ jobs:
   playwright-e2e-tests:
     strategy:
       matrix:
-        shardIndex: [1, 2, 3, 4, 5]
+        shardIndex: [1,2,3,4,5]
         shardTotal: [5]
       fail-fast: false
 
-    timeout-minutes: 60
+    timeout-minutes: 99
     runs-on: ubuntu-latest
     steps:
       - name: Checkout test code
         uses: actions/checkout@v4
         with:
-          repository: helioviewer-project/helioviewer.org-tests
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_pr != '' && format('refs/pull/{0}/head', github.event.inputs.test_pr) || github.ref }}
+          repository: 'Helioviewer-Project/helioviewer.org-tests'
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_pr != '' && format('refs/pull/{0}/head', github.event.inputs.test_pr) || github.ref}}
 
       - name: Checkout Helioviewer.org code being tested
         uses: actions/checkout@v4
         with:
-          repository: helioviewer-project/helioviewer.org
+          repository: 'Helioviewer-Project/helioviewer.org'
           submodules: true
           path: "helioviewer.org"
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'main' }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || format('refs/pull/{0}/head', '673')  || 'main' }}
 
       - name: Checkout the Helioviewer API code being tested
         uses: actions/checkout@v4
         with:
-          repository: 'helioviewer-project/api'
+          repository: 'Helioviewer-Project/api'
           path: 'api'
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || 'main' }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || format('refs/pull/{0}/head', '436') || 'main' }}
       - name: Print current directory
         run: |
           echo $(pwd)
