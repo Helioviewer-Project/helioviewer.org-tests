@@ -2,7 +2,7 @@ import { test } from "@playwright/test";
 import { Helioviewer } from "../../../page_objects/helioviewer";
 
 // If there is no image to make movie , then hv should show some friendly notification message
-test("If there is not enough data, helioviewer should show warning message about no data situation", async ({ page }) => {
+test.only("If there is not enough data, helioviewer should show warning message about no data situation", async ({ page }) => {
   let hv = new Helioviewer(page);
 
   // load helioviewer
