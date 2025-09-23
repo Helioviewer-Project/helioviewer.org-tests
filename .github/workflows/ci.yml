@@ -74,10 +74,10 @@ jobs:
       - name: Checkout Helioviewer.org code being tested
         uses: actions/checkout@v4
         with:
-          repository: 'Helioviewer-Project/helioviewer.org'
+          repository: 'dgarciabriseno/helioviewer.org'
           submodules: true
           path: "helioviewer.org"
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'main' }}
+          ref: fix-movie-error
 
       - name: Checkout the Helioviewer API code being tested
         uses: actions/checkout@v4
