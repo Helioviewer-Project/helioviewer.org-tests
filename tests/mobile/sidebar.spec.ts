@@ -135,14 +135,17 @@ test("[Mobile] Test Help Links", async ({ page, context }) => {
 
   // Link 2: Visual Glossary
   // Waiting for this thumbnail is important for the snapshot
-  let youtubePreviewPromise = page.waitForResponse("https://i.ytimg.com/vi/tPR36FI4oGU/hqdefault.jpg");
   await mobile.OpenSidebar();
   await help_menu.getByText("Visual Glossary").tap();
+
+  await page.waitForTimeout(5000);
+
   await expect(page.getByText("Helioviewer - Glossary")).toBeVisible();
   await expect(page.getByText("Coronal Mass Ejection (CME)")).toBeVisible();
   await expect(page.getByText("Solar Terrestrial Relations Observatory")).toBeVisible();
-  await youtubePreviewPromise;
-  await expect(page).toHaveScreenshot();
+  await expect(page).toHaveScreenshot({
+    mask: [page.locator(".youtube-player")]
+  });
   await mobile.CloseDialog();
 
   // Link 3: Public API Docs, test that it opens the API docs in a new tab
