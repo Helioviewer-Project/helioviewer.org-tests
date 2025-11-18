@@ -106,7 +106,7 @@ async function mockEvents(page: Page, eventTree: EventTree): Promise<void> {
                     "Event Type": eventtype
                   },
                   type: randomEventType,
-                  id: `ivo://helio-informatics.org/${eventTypePin}_${frmReference}_20180904_192913_2017-09-06T120400.${randomMilliseconds}-007`,
+                  id: eventlabel,
                   active: "true",
                   area_atdiskcenter: null,
                   area_atdiskcenteruncert: null,

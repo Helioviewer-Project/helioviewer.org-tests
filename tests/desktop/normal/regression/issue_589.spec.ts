@@ -220,7 +220,7 @@ test("Issue 589, names with same frm name , creating problems for highlighting f
                 hv_hpc_y: 862.901408711809,
                 label: "SPoCA 26458",
                 version: "SPoCA_v1.0_CH_0000026458",
-                id: "ivo://helio-informatics.org/CH_SPoCA_20170906_144026_20170906T142505_3",
+                id: "SPoCA 26458",
                 type: "CH",
                 start: "2017-09-06T10:25:05",
                 end: "2017-09-06T14:25:05"
@@ -423,7 +423,7 @@ test("Issue 589, names with same frm name , creating problems for highlighting f
                 hv_hpc_y: 858.0564007054577,
                 label: "SPoCA 26505",
                 version: "SPoCA_v1.0_CH_0000026505",
-                id: "ivo://helio-informatics.org/CH_SPoCA_20170906_144026_20170906T142505_4",
+                id: "SPoCA 26505",
                 type: "CH",
                 start: "2017-09-06T10:25:05",
                 end: "2017-09-06T14:25:05"
@@ -626,7 +626,7 @@ test("Issue 589, names with same frm name , creating problems for highlighting f
                 hv_hpc_y: -528.2513063725654,
                 label: "SPoCA 26492",
                 version: "SPoCA_v1.0_CH_0000026492",
-                id: "ivo://helio-informatics.org/CH_SPoCA_20170906_144025_20170906T142505_1",
+                id: "SPoCA 26492",
                 type: "CH",
                 start: "2017-09-06T10:25:05",
                 end: "2017-09-06T14:25:05"
@@ -819,7 +819,7 @@ test("Issue 589, names with same frm name , creating problems for highlighting f
                 hv_hpc_y: -942.9563916452579,
                 label: "SPoCA 26494",
                 version: "SPoCA_v1.0_CH_0000026494",
-                id: "ivo://helio-informatics.org/CH_SPoCA_20170906_144025_20170906T142505_0",
+                id: "SPoCA 26494",
                 type: "CH",
                 start: "2017-09-06T10:25:05",
                 end: "2017-09-06T14:25:05"
@@ -1078,7 +1078,7 @@ test("Issue 589, names with same frm name , creating problems for highlighting f
                 hv_hpc_y: 164.85236302240853,
                 label: "SPoCA 21090",
                 version: "SPoCA_v1.0_AR_0000021090",
-                id: "ivo://helio-informatics.org/AR_SPoCA_20170906_144054_20170906T142522_2",
+                id: "SPoCA 21090",
                 type: "AR",
                 start: "2017-09-06T10:25:22",
                 end: "2017-09-06T14:25:22"
@@ -1324,7 +1324,7 @@ test("Issue 589, names with same frm name , creating problems for highlighting f
                 hv_hpc_y: 132.71376514267075,
                 label: "SPoCA 21080",
                 version: "SPoCA_v1.0_AR_0000021080",
-                id: "ivo://helio-informatics.org/AR_SPoCA_20170906_144054_20170906T142522_1",
+                id: "SPoCA 21080",
                 type: "AR",
                 start: "2017-09-06T10:25:22",
                 end: "2017-09-06T14:25:22"
@@ -1572,7 +1572,7 @@ test("Issue 589, names with same frm name , creating problems for highlighting f
                 hv_hpc_y: -240.12880201192175,
                 label: "SPoCA 21094",
                 version: "SPoCA_v1.0_AR_0000021094",
-                id: "ivo://helio-informatics.org/AR_SPoCA_20170906_144054_20170906T142522_0",
+                id: "SPoCA 21094",
                 type: "AR",
                 start: "2017-09-06T10:25:22",
                 end: "2017-09-06T14:25:22"
