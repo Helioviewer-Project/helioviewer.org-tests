@@ -185,7 +185,7 @@ test("Issue 588, special characters in event tree causing to tree to fail", asyn
               label: "Topological Object 332.66,52.80",
               short_label: "Topological Object 332.66,52.80",
               version: "",
-              id: "ivo://helio-informatics.org/TO_SSWPFSSv2+nullpointfinderv20180808_20180904_192913_2017-09-06T120400.000-007",
+              id: "Topological Object 332.66,52.80",
               type: "TO",
               start: "2017-09-06T09:04:00",
               end: "2017-09-06T15:04:00"
@@ -355,7 +355,7 @@ test("Issue 588, special characters in event tree causing to tree to fail", asyn
               label: "Topological Object 34.87,51.77",
               short_label: "Topological Object 34.87,51.77",
               version: "",
-              id: "ivo://helio-informatics.org/TO_SSWPFSSv2+nullpointfinderv20180808_20180904_192913_2017-09-06T120400.000-008",
+              id: "Topological Object 34.87,51.77",
               type: "TO",
               start: "2017-09-06T09:04:00",
               end: "2017-09-06T15:04:00"
@@ -525,7 +525,7 @@ test("Issue 588, special characters in event tree causing to tree to fail", asyn
               label: "Topological Object 204.85,40.70",
               short_label: "Topological Object 204.85,40.70",
               version: "",
-              id: "ivo://helio-informatics.org/TO_SSWPFSSv2+nullpointfinderv20180808_20180904_192913_2017-09-06T120400.000-005",
+              id: "Topological Object 204.85,40.70",
               type: "TO",
               start: "2017-09-06T09:04:00",
               end: "2017-09-06T15:04:00"
