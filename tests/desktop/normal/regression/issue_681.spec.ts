@@ -38,7 +38,6 @@ test.only("Issue 681, Duplicate event labels should be handled correctly", async
   // Open Solar Flare Predictions > AMOS branch
   await ccmcTree.toggleBranchFRM("Solar Flare Predictions", "AMOS");
 
-
   // The key test: We should have 2 separate event instances with the same label "C+ 34.05% M+: 2.82%"
   // They should be independently selectable/manageable
   const duplicateLabel = "C+ 34.05% M+: 2.82%";
@@ -51,7 +50,6 @@ test.only("Issue 681, Duplicate event labels should be handled correctly", async
   // Both events with the same label should now be visible (if bug exists, only one will be)
   await ccmcTree.assertEventInstanceNodeChecked("Solar Flare Predictions", "AMOS", firstEventId);
   await ccmcTree.assertEventInstanceNodeUnchecked("Solar Flare Predictions", "AMOS", secondEventId);
-
 
   // Action 5: Test HEK events with duplicate labels
   const hekTree = hv.parseTree("HEK");

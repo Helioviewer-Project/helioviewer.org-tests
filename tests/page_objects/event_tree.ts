@@ -117,7 +117,7 @@ class EventTree {
     // Find the span containing the label text, navigate to parent div, then find the checkbox
     await this.page
       .locator(`span:has-text("${label_text}")`)
-      .locator('..')
+      .locator("..")
       .locator('input[type="checkbox"]')
       .first()
       .click();
