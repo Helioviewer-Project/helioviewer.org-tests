@@ -7,7 +7,7 @@ import { Helioviewer } from "../../../page_objects/helioviewer";
  * between 2 distinct events even though they have the same label but different IDs
  * @see https://github.com/Helioviewer-Project/helioviewer.org/issues/681
  */
-test.only("Issue 681, Duplicate event labels should be handled correctly", async ({ page }, info) => {
+test("Issue 681, Duplicate event labels should be handled correctly", async ({ page }, info) => {
   // Mock CCMC events with duplicate labels (same label, different IDs)
   await page.route("*/**/*action=events&sources=CCMC*", async (route) => {
     await route.fulfill({ json: CCMC_DUPLICATE_LABELS_JSON });
