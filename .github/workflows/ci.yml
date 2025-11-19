@@ -77,7 +77,7 @@ jobs:
           repository: 'Helioviewer-Project/helioviewer.org'
           submodules: true
           path: "helioviewer.org"
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'main' }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'refs/pull/692/head' }}
 
       - name: Checkout the Helioviewer API code being tested
         uses: actions/checkout@v4

@@ -101,6 +101,25 @@ class EventTree {
   async toggleCheckEventInstance(event_type: string, frm: string, event_instance: string) {
     await this.page
       .getByTestId(`event-tree-checkbox-${this.source + ">>" + event_type + ">>" + frm + ">>" + event_instance}`)
+      .first()
+      .click();
+  }
+
+  /**
+   * This function toggles (checks if unchecked or unchecks if checked) the first event instance that matches the given label text.
+   * This is useful for handling duplicate labels - it will operate on the first occurrence.
+   * @param event_type parameter specifies the type of event (ex: Active Region, Corona Hole)
+   * @param frm parameter specifies the name of the frm (ex: "NOAA SWPC Observer").
+   * @param label_text parameter specifies the visible label text of the event instance (ex: "C+: 6.83%\nM+: 0.34%\nX: 0%").
+   * @return void promise about the task is done
+   **/
+  async toggleCheckEventInstanceByLabel(event_type: string, frm: string, label_text: string) {
+    // Find the span containing the label text, navigate to parent div, then find the checkbox
+    await this.page
+      .locator(`span:has-text("${label_text}")`)
+      .locator('..')
+      .locator('input[type="checkbox"]')
+      .first()
       .click();
   }
 
