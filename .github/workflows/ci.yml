@@ -65,111 +65,24 @@ jobs:
     timeout-minutes: 99
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout test code
-        uses: actions/checkout@v4
-        with:
-          repository: 'Helioviewer-Project/helioviewer.org-tests'
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_pr != '' && format('refs/pull/{0}/head', github.event.inputs.test_pr) || github.ref}}
-
-      - name: Checkout Helioviewer.org code being tested
-        uses: actions/checkout@v4
-        with:
-          repository: 'Helioviewer-Project/helioviewer.org'
-          submodules: true
-          path: "helioviewer.org"
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'main' }}
-
-      - name: Checkout the Helioviewer API code being tested
-        uses: actions/checkout@v4
-        with:
-          repository: 'Helioviewer-Project/api'
-          path: 'api'
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || 'main' }}
-      - name: Print current directory
-        run: |
-          echo $(pwd)
-          echo $(ls)
-
-      # This workflow is designed so that we can specify exactly which pull
-      # requests we want to test against. This is here for reference of the
-      # exact commit IDs and pull requests are being tested
-      - name: Print current helioviewer.org commit
-        run: |
-          cd helioviewer.org
-          echo  web commit: $(git rev-parse HEAD). PR: ${{ github.event.inputs.helioviewer_pr || 'N/A' }}
-          cd ../api
-          echo  api commit: $(git rev-parse HEAD). PR: ${{ github.event.inputs.api_pr || 'N/A' }}
-          cd ..
-          echo test commit: $(git rev-parse HEAD). PR: ${{ github.event.inputs.test_pr || 'N/A' }}
-      - name: Checkout the Dockerfile for local Helioviewer
-        uses: actions/checkout@v4
-        with:
-          repository: 'Helioviewer-Project/helioviewer.org-docker'
-          path: 'compose'
-          sparse-checkout: |
-            compose.yaml
-            .env.example
-          sparse-checkout-cone-mode: false
-      - name: Setup environment file
-        run: mv compose/.env.example .env
-      - name: Start local Helioviewer environment
-        id: docker
-        run: |
-          mv compose/compose.yaml .
-          docker compose up -d --wait
-      - name: Show docker compose logs
-        if: always()
-        run: |
-          docker compose logs
-          cat compose.yaml
-      - name: Fix cache directory permissions
-        if: always()
-        run: |
-          docker compose exec web chown 33:33 cache
-      - name: Install node
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/*
-      - name: Install Playwright Browsers
-        run: |
-          npm ci
-          npx playwright install --with-deps
       - name: Run Playwright tests
-        run: |
-          npx playwright test --shard=${{matrix.shardIndex}}/${{matrix.shardTotal}}
-      - name: Upload blob report to GitHub Actions Artifacts
-        if: ${{ !cancelled() }}
-        uses: actions/upload-artifact@v4
+        uses: ./.github/actions/playwright-test
         with:
-          name: blob-report-${{ matrix.shardIndex }}
-          path: blob-report
-          retention-days: 1
+          helioviewer-org-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'main' }}
+          api-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || 'main' }}
+          helioviewer-tests-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_pr != '' && format('refs/pull/{0}/head', github.event.inputs.test_pr) || github.ref}}
+          shard-index: ${{ matrix.shardIndex }}
+          shard-total: ${{ matrix.shardTotal }}
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed.
     if: ${{ !cancelled() }}
     needs: [playwright-e2e-tests]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm ci
+    - name: Checkout test code
+      uses: actions/checkout@v4
 
-    - name: Download blob reports from GitHub Actions Artifacts
-      uses: actions/download-artifact@v4
+    - name: Merge reports
+      uses: ./.github/actions/playwright-merge-reports
       with:
-        path: all-blob-reports
-        pattern: blob-report-*
-        merge-multiple: true
-
-    - name: Merge into HTML Report
-      run: npx playwright merge-reports --reporter html ./all-blob-reports
-
-    - name: Upload HTML report
-      uses: actions/upload-artifact@v4
-      with:
-        name: html-report--attempt-${{ github.run_attempt }}
-        path: playwright-report
-        retention-days: 3
+        test-repo-path: .
