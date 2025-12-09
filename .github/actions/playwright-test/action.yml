@@ -1,0 +1,80 @@
+name: 'Helioviewer Playwright Test'
+description: 'Setup Helioviewer environment and run Playwright tests'
+
+inputs:
+  helioviewer-org-ref:
+    description: 'Git ref to checkout for helioviewer.org'
+    required: false
+    default: 'main'
+  api-ref:
+    description: 'Git ref to checkout for api'
+    required: false
+    default: 'main'
+  helioviewer-tests-ref:
+    description: 'Git ref to checkout for helioviewer.org-tests'
+    required: false
+    default: 'main'
+  shard-index:
+    description: 'Current shard index for test parallelization'
+    required: true
+  shard-total:
+    description: 'Total number of shards for test parallelization'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout test code
+      uses: actions/checkout@v4
+      with:
+        repository: 'Helioviewer-Project/helioviewer.org-tests'
+        ref: ${{ inputs.helioviewer-tests-ref }}
+        path: helioviewer.org-tests
+
+    - name: Setup Helioviewer Docker environment
+      uses: Helioviewer-Project/helioviewer.org-docker/.github/actions/helioviewer-docker@main
+      with:
+        helioviewer-org-ref: ${{ inputs.helioviewer-org-ref }}
+        api-ref: ${{ inputs.api-ref }}
+
+    - name: Print current helioviewer.org commit
+      shell: bash
+      run: |
+        cd helioviewer.org-docker/helioviewer.org
+        echo  web commit: $(git rev-parse HEAD)
+        cd ../api
+        echo  api commit: $(git rev-parse HEAD)
+        cd ../../helioviewer.org-tests
+        echo test commit: $(git rev-parse HEAD)
+
+    - name: Show docker compose logs
+      if: always()
+      shell: bash
+      working-directory: helioviewer.org-docker
+      run: docker compose logs
+
+    - name: Install node
+      uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Install Playwright Browsers
+      shell: bash
+      working-directory: helioviewer.org-tests
+      run: |
+        npm ci
+        npx playwright install --with-deps
+
+    - name: Run Playwright tests
+      shell: bash
+      working-directory: helioviewer.org-tests
+      run: |
+        npx playwright test --shard=${{ inputs.shard-index }}/${{ inputs.shard-total }}
+
+    - name: Upload blob report to GitHub Actions Artifacts
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v4
+      with:
+        name: blob-report-${{ inputs.shard-index }}
+        path: helioviewer.org-tests/blob-report
+        retention-days: 1
