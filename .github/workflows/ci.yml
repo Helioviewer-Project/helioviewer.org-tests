@@ -65,6 +65,12 @@ jobs:
     timeout-minutes: 99
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout test code for composite action
+        uses: actions/checkout@v4
+        with:
+          repository: 'Helioviewer-Project/helioviewer.org-tests'
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_pr != '' && format('refs/pull/{0}/head', github.event.inputs.test_pr) || github.ref}}
+
       - name: Run Playwright tests
         uses: ./.github/actions/playwright-test
         with:
