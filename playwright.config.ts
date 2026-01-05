@@ -6,9 +6,6 @@ import { defineConfig, devices } from "@playwright/test";
  */
 // require('dotenv').config();
 
-/**
- * Test files must be prefixed with 'mobile_', 'desktop_' or 'all_'
- */
 const Platforms = {
   mobile: /(mobile|(desktop.*@Mobile))/,
   desktop: /(desktop)/,
