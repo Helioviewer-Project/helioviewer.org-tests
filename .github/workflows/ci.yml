@@ -83,7 +83,8 @@ jobs:
           shard-total: ${{ matrix.shardTotal }}
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed.
-    if: ${{ !cancelled() }}
+    # Skip on pull requests since e2e tests don't run
+    if: ${{ !cancelled() && github.event_name != 'pull_request' }}
     needs: [playwright-e2e-tests]
     runs-on: ubuntu-latest
     steps:
