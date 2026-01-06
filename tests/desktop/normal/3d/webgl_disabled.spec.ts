@@ -1,23 +1,27 @@
 import { test, expect } from "@playwright/test";
 import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "../../../page_objects/helioviewer_interface";
 
-// Disable WebGL for this test file (Chromium/Edge only)
-test.use({
-  launchOptions: {
-    args: ['--disable-webgl', '--disable-webgl2']
-  }
-});
-
 [MobileView, DesktopView].forEach((view) => {
-  test(
-    `[${view.name}] Verify error message when WebGL is disabled`,
-    { tag: [view.tag] },
-    async ({ page, browserName }, info) => {
-      // Skip non-Chromium browsers (WebGL disable flags only work on Chromium/Edge)
+  test.describe(() => {
+    // Only apply WebGL disable flags for chromium-based browsers
+    test.beforeEach(async ({ browserName }) => {
       test.skip(
         browserName === "firefox" || browserName === "webkit",
         "WebGL disable flags only work on Chromium-based browsers"
       );
+    });
+
+    // Disable WebGL for Chromium/Edge only
+    test.use({
+      launchOptions: {
+        args: ['--disable-webgl', '--disable-webgl2']
+      }
+    });
+
+    test(
+      `[${view.name}] Verify error message when WebGL is disabled`,
+      { tag: [view.tag] },
+      async ({ page }, info) => {
 
       let hv = HelioviewerFactory.Create(view, page, info) as MobileInterface;
 
@@ -42,6 +46,7 @@ test.use({
 
       // Verify 3D mode did not activate
       expect(await page.locator(".js-3d-toggle.active").count()).toBe(0);
-    }
-  );
+      }
+    );
+  });
 });
