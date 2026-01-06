@@ -3,8 +3,6 @@ name: Test helioviewer.org
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
   # Workflow dispatch is used to trigger these tests from the helioviewer.org
   # repository. It passes the commit so that the tests can run against the code
   # submitted with the pull request. This lets us run the latest tests
