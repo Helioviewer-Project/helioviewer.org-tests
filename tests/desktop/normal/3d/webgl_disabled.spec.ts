@@ -2,7 +2,7 @@ import { test, expect, chromium } from "@playwright/test";
 import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "../../../page_objects/helioviewer_interface";
 
 [MobileView, DesktopView].forEach((view) => {
-  test.only(
+  test(
     `[${view.name}] Verify error message when WebGL is disabled`,
     { tag: [view.tag] },
     async ({ browserName }, info) => {
