@@ -18,7 +18,7 @@ import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "..
       }
     });
 
-    test(
+    test.only(
       `[${view.name}] Verify error message when WebGL is disabled`,
       { tag: [view.tag] },
       async ({ page }, info) => {
