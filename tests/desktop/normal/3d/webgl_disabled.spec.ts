@@ -1,5 +1,10 @@
 import { test, expect, chromium } from "@playwright/test";
-import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "../../../page_objects/helioviewer_interface";
+import {
+  MobileView,
+  DesktopView,
+  HelioviewerFactory,
+  MobileInterface
+} from "../../../page_objects/helioviewer_interface";
 
 [MobileView, DesktopView].forEach((view) => {
   test(
@@ -16,7 +21,7 @@ import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "..
       // before the test starts. This causes webkit/firefox to fail with "Unknown option --disable-webgl"
       // before test.skip() can execute. Instead, we manually launch the browser here.
       const browser = await chromium.launch({
-        args: ['--disable-webgl', '--disable-webgl2']
+        args: ["--disable-webgl", "--disable-webgl2"]
       });
 
       // Use device configuration from the current project
@@ -41,7 +46,8 @@ import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "..
 
         // Verify error message is displayed
         await expect(
-          page.locator("div.jGrowl-notification.error > div.jGrowl-message")
+          page
+            .locator("div.jGrowl-notification.error > div.jGrowl-message")
             .getByText(/Your browser does not support WebGL/i)
         ).toBeVisible();
 

@@ -1,5 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "../../../page_objects/helioviewer_interface";
+import {
+  MobileView,
+  DesktopView,
+  HelioviewerFactory,
+  MobileInterface
+} from "../../../page_objects/helioviewer_interface";
 
 // Bug: Error message incorrectly appears after refreshing page with 3D mode enabled
 // This behavior was observed during manual testing:
@@ -12,10 +17,7 @@ import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "..
     { tag: [view.tag] },
     async ({ page, browserName }, info) => {
       // Skip Firefox - it doesn't support 3D mode
-      test.skip(
-        browserName === "firefox",
-        "Firefox does not support 3D mode"
-      );
+      test.skip(browserName === "firefox", "Firefox does not support 3D mode");
 
       let hv = HelioviewerFactory.Create(view, page, info) as MobileInterface;
 
@@ -43,7 +45,8 @@ import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "..
 
       // Verify no WebGL error message appears
       await expect(
-        page.locator("div.jGrowl-notification.error > div.jGrowl-message")
+        page
+          .locator("div.jGrowl-notification.error > div.jGrowl-message")
           .getByText(/Your browser does not support WebGL/i)
       ).not.toBeVisible();
 
