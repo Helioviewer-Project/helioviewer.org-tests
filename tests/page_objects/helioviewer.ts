@@ -190,7 +190,11 @@ class Helioviewer implements DesktopInterface {
     // wait some time for the number of image tiles to update.
     await this.WaitForTileCountToSettle();
     // wait for playwright to believe the network is done loading
-    await this.page.waitForLoadState("networkidle");
+    try {
+      await this.page.waitForLoadState("networkidle", { timeout: 10000 });
+    } catch (error) {
+      console.error("page.waitForLoadState timed out after 10 seconds. Proceeding anyway");
+    }
     // check all img tags to ensure they're done loading.
     let locators = await this.page.locator("img.tile");
     // Get all the img tags

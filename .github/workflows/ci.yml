@@ -56,6 +56,8 @@ jobs:
         run: npm run prettier-check
 
   playwright-e2e-tests:
+    # Skip e2e tests on pull requests - only run on push to main and workflow_dispatch
+    if: github.event_name != 'pull_request'
     strategy:
       matrix:
         shardIndex: [1,2,3,4,5]
@@ -81,7 +83,8 @@ jobs:
           shard-total: ${{ matrix.shardTotal }}
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed.
-    if: ${{ !cancelled() }}
+    # Skip on pull requests since e2e tests don't run
+    if: ${{ !cancelled() && github.event_name != 'pull_request' }}
     needs: [playwright-e2e-tests]
     runs-on: ubuntu-latest
     steps:
