@@ -191,7 +191,7 @@ class Helioviewer implements DesktopInterface {
     await this.WaitForTileCountToSettle();
     // wait for playwright to believe the network is done loading
     try {
-      await this.page.waitForLoadState("networkidle", {timeout: 10000});
+      await this.page.waitForLoadState("networkidle", { timeout: 10000 });
     } catch (error) {
       console.error("page.waitForLoadState timed out after 10 seconds. Proceeding anyway");
     }
