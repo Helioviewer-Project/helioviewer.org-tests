@@ -96,6 +96,10 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
     // Wait for 3D scene to re-render
     await page.waitForTimeout(1000);
 
+    // Update observation date back to where it was
+    await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 00:00:00"));
+    await hv.WaitForLoadingComplete();
+
     // Verify sun stayed in dragged position (screenshot should match)
     await expect(page).toHaveScreenshot("sun-dragged-initial.png");
   });
