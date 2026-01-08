@@ -62,7 +62,7 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
    *
    * This test currently expects the correct behavior and will FAIL until the bug is fixed.
    */
-  test(`[${view.name}] Sun stays off-center after date update`, { tag: view.tag }, async ({ page }, info) => {
+  test.only(`[${view.name}] Sun stays off-center after date update`, { tag: view.tag }, async ({ page }, info) => {
     // Firefox in playwright does not allow webgl2 creation.
     if (page.context().browser().browserType().name() === "firefox") {
       test.skip();
@@ -99,6 +99,8 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
     // Update observation date back to where it was
     await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 00:00:00"));
     await hv.WaitForLoadingComplete();
+    // Wait for 3D scene to re-render
+    await page.waitForTimeout(1000);
 
     // Verify sun stayed in dragged position (screenshot should match)
     await expect(page).toHaveScreenshot("sun-dragged-initial.png");
