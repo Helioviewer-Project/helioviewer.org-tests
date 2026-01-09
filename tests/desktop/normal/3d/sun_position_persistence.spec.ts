@@ -88,7 +88,7 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
     await page.waitForTimeout(1000);
     await page.mouse.up({ button: "right" });
 
-    await expect(page).toHaveScreenshot('initial.png');
+    await expect(page).toHaveScreenshot("initial.png");
 
     // Update observation date
     await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 06:00:00Z"));
@@ -106,6 +106,6 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
     // is slightly off. It is functional enough to rely on, even though
     // it's not perfect. So compare to a separate screenshot rather than
     // against the original.
-    await expect(page).toHaveScreenshot('after-change.png');
+    await expect(page).toHaveScreenshot("after-change.png");
   });
 });
