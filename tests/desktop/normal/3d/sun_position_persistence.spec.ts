@@ -98,6 +98,9 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
     await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 00:00:00Z"));
     await hv.WaitForLoadingComplete();
 
+    // Wait for 3D to finish rendering
+    await page.waitForTimeout(1000);
+
     // In theory this "should" be the same as initial.png, but it seems that
     // either due to math errors or precision errors the actual result
     // is slightly off. It is functional enough to rely on, even though
