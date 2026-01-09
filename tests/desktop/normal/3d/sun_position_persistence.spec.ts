@@ -5,7 +5,6 @@ import {
   DesktopView,
   MobileInterface
 } from "../../../page_objects/helioviewer_interface";
-import fs from "fs";
 
 const gse2frameResponse = {
   coordinates: [
@@ -63,7 +62,7 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
    *
    * This test currently expects the correct behavior and will FAIL until the bug is fixed.
    */
-  test.only(`[${view.name}] Sun stays off-center after date update`, { tag: view.tag }, async ({ page }, info) => {
+  test(`[${view.name}] Sun stays off-center after date update`, { tag: view.tag }, async ({ page }, info) => {
     // Firefox in playwright does not allow webgl2 creation.
     if (page.context().browser().browserType().name() === "firefox") {
       test.skip();
