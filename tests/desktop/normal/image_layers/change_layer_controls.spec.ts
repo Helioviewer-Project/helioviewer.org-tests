@@ -29,7 +29,7 @@ test("Image Layer Controls | observatory changes should produce consistent match
 
   // 5. GO BACK TO SDO AGAIN
   await layer.set("Observatory:", "SDO");
-  // TODO : FIX possible problem of Measurement selection
+  await layer.set("Instrument:", "AIA");
   await layer.set("Measurement:", "304");
   await hv.WaitForLoadingComplete();
   await hv.CloseAllNotifications();

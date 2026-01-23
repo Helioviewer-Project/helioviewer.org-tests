@@ -38,10 +38,6 @@ async function mockEvents(page: Page, eventTree: EventTree): Promise<void> {
   for (const source in eventTree) {
     // Mock API events request to include problem data which creates bug
     await page.route(`**/*action=events&sources=${source}*`, async (route) => {
-      // Fetch original response.
-      const response = await route.fetch();
-
-      // const newJson = await response.json()
       const newJson = [];
 
       for (const eventtype in eventTree[source]) {

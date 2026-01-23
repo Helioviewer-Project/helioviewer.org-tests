@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 import { Helioviewer } from "../../../page_objects/helioviewer";
-import * as fs from "fs";
 
 /**
  * This test is a regression test for proving issue 647 is fixed for the given helioviewer

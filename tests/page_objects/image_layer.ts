@@ -80,7 +80,8 @@ class ImageLayer {
    */
   async set(label: string, value: string): Promise<void> {
     let selection = await this.layer_controls.getByLabel(label, { exact: true });
-    await selection.selectOption(value);
+    // Fail fast (5s) if option isn't available - if longer, something is wrong with the app
+    await selection.selectOption(value, { timeout: 5000 });
     await this.page.waitForTimeout(500);
   }
 
