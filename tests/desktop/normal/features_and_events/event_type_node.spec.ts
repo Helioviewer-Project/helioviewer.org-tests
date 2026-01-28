@@ -171,7 +171,7 @@ import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "pa
       await hv.CloseAllNotifications();
       // On mobile we need to re-open the drawer to check for checked events.
       if (view == MobileView) {
-        hv.OpenEventsDrawer();
+        await hv.OpenEventsDrawer();
       }
 
       // Action 5: Assert all event_type nodes should still be same after refresh

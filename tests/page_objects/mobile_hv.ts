@@ -22,7 +22,9 @@ class HvMobile implements MobileInterface {
   private _image_drawer: Locator;
   /** [drawersec=accordion-images] - Ref to the button which opens the image drawer */
   private _image_drawer_btn: Locator;
-  /** [drawersec=accordion-images] - Ref to the button which opens the events drawer */
+  /** #accordion-events - Reference to the events drawer */
+  private _events_drawer: Locator;
+  /** Button which opens the events drawer */
   private _events_drawer_btn: Locator;
   /** #hv-drawer-left - Ref to the drawer container which contains all the control elements */
   private _drawer: Locator;
@@ -43,6 +45,7 @@ class HvMobile implements MobileInterface {
     this._controls = this.page.locator(".hvbottombar");
     this._image_drawer = this.page.locator("#accordion-images");
     this._image_drawer_btn = this.page.locator('[drawersec="accordion-images"]');
+    this._events_drawer = this.page.locator("#accordion-events");
     this._events_drawer_btn = this.page.getByText("Features & Events");
     this._drawer = this.page.locator("#hv-drawer-left");
     this._drawer_close_btn = this.page.locator("#hvmobdrawerclose");
@@ -133,8 +136,8 @@ class HvMobile implements MobileInterface {
   }
 
   async OpenEventsDrawer() {
-    // This logic might be flaky.
-    if ((await this._IsDrawerClosed()) || (await this._image_drawer.isHidden())) {
+    // Tap to open if drawer is closed, or if events drawer content is hidden (meaning another tab is showing)
+    if ((await this._IsDrawerClosed()) || (await this._events_drawer.isHidden())) {
       await this._events_drawer_btn.tap();
     }
   }
