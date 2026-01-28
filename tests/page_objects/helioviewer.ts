@@ -202,7 +202,7 @@ class Helioviewer implements DesktopInterface {
     // Create promises that resolve when the img is done loading, when
     // the img's "complete" attribute is set to true.
     let promises = images.map((locator) => {
-      return locator.count().then((n) => {
+      return locator.count().then(async (n) => {
         // There seems to be an issue where the locator does not exist.
         // It should exist, it was there when we executed "locators.all"
         // but now playwright is going to fail "waiting for locator".
@@ -210,25 +210,33 @@ class Helioviewer implements DesktopInterface {
         // reason, then just return instead of trying to wait.
         if (n == 0) return;
 
-        return locator.evaluate(
-          (img) => {
-            return new Promise<void>((resolve) => {
-              if ((img as HTMLImageElement).complete) {
-                resolve();
-              } else {
-                // Periodically check for the image to be done loading.
-                let interval = setInterval(() => {
-                  if ((img as HTMLImageElement).complete) {
-                    clearInterval(interval);
-                    resolve();
-                  }
-                }, 500);
-              }
-            });
-          },
-          null,
-          { timeout: 10000 }
-        );
+        try {
+          return await locator.evaluate(
+            (img) => {
+              return new Promise<void>((resolve) => {
+                if ((img as HTMLImageElement).complete) {
+                  resolve();
+                } else {
+                  // Periodically check for the image to be done loading.
+                  let interval = setInterval(() => {
+                    if ((img as HTMLImageElement).complete) {
+                      clearInterval(interval);
+                      resolve();
+                    }
+                  }, 500);
+                }
+              });
+            },
+            null,
+            { timeout: 10000 }
+          );
+        } catch (error) {
+          // If the element becomes detached from the DOM between the count
+          // check and the evaluate call, just ignore it and continue.
+          // This can happen when tiles are dynamically replaced during loading.
+          console.log("Ignoring error for detached element:", error);
+          return;
+        }
       });
     });
     await Promise.all(promises);

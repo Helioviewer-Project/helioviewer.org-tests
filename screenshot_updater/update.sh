@@ -87,7 +87,7 @@ cp -r data "$wd"
 
 # Extract base64 string from index.html
 # Save the base64 string to a file
-grep -oE 'window\.playwrightReportBase64 = "data:application/zip;base64,[^"]*' "$temp_dir/index.html" | awk -F'base64,' '{print $2}' > playwright_report_base64
+grep -oE '>data:application/zip;base64,[^"]*' "$temp_dir/index.html" | awk -F'base64,' '{ print substr($2, 0, length($2) - 9) }' > playwright_report_base64
 cat playwright_report_base64
 
 # Decode the base64 string into a zip file

@@ -164,7 +164,7 @@ import { MobileView, DesktopView, HelioviewerFactory, MobileInterface } from "pa
       await hv.CloseAllNotifications();
 
       // For mobile we need to re-open the events drawer
-      if (view == MobileView) hv.OpenEventsDrawer();
+      if (view == MobileView) await hv.OpenEventsDrawer();
 
       // Action 5: Assert all et1 branch
       await ccmc.assertEventTypeNodeHalfChecked("et1");
