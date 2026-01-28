@@ -80,22 +80,21 @@ test("[Mobile] Center viewport with AIA 304 and LASCO C2/C3", async ({ page }, i
   // await mobile.WaitForLoad();
   // 4. Expect the screenshot to match. Referencing by name so we can re-use it later.
   const centered_image = "sdo_soho_centered.png";
-  // Rendering seems a bit flaky but not significantly flaky.
-  const opts: PageScreenshotOptions = {
-    style: "#helioviewer-viewport-container-outer {z-index:200000}",
-    scale: "css"
+  const viewportLocator = page.locator("#helioviewer-viewport-container-outer");
+  const screenshotOpts = {
+    mask: [page.locator("#hvmobdate_td"), page.locator("#hvmobtime_td")]
   };
   // On Safari on Mac, the rendering is not consistent... Some white streaks in
   // the image are sometimes thick, and sometimes thin.
-  await expect(await page.screenshot(opts)).toMatchSnapshot(centered_image);
+  await expect(viewportLocator).toHaveScreenshot(centered_image, screenshotOpts);
   // 5. Drag the sun off center
   await mobile.moveViewport(250, 250);
   // 6. expect the screenshot not to match
-  await expect(await page.screenshot(opts)).not.toMatchSnapshot(centered_image);
+  await expect(viewportLocator).not.toHaveScreenshot(centered_image, screenshotOpts);
   // 7. Center the viewport again
   await mobile.CenterViewport();
   // 8. Expect the screenshot to match again.
-  await expect(await page.screenshot(opts)).toMatchSnapshot(centered_image);
+  await expect(viewportLocator).toHaveScreenshot(centered_image, screenshotOpts);
 });
 
 /**
