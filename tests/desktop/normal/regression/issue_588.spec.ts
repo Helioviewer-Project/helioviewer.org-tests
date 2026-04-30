@@ -14,6 +14,10 @@ test("Issue 588, special characters in event tree causing to tree to fail", asyn
     // Add a prefix to the title.
     let newJson = await response.json();
 
+    // Filter if Topological Obhect is already on the tree,
+    newJson = newJson.filter((x) => x.name !== "Topological Object");
+
+    // Swap the "Topological Object" with the problem one
     newJson.push({
       name: "Topological Object",
       pin: "TO",
