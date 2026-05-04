@@ -56,8 +56,7 @@ jobs:
         run: npm run prettier-check
 
   playwright-e2e-tests:
-    # Skip e2e tests on pull requests - only run on push to main and workflow_dispatch
-    if: github.event_name != 'pull_request'
+    # TEMP: hardcoded against api#478 + helioviewer.org#707 — revert before merge
     strategy:
       matrix:
         shardIndex: [1,2,3,4,5]
@@ -76,15 +75,15 @@ jobs:
       - name: Run Playwright tests
         uses: ./.github/actions/playwright-test
         with:
-          helioviewer-org-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.helioviewer_pr != '' && format('refs/pull/{0}/head', github.event.inputs.helioviewer_pr) || 'main' }}
-          api-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || 'main' }}
+          # TEMP: hardcoded against api#478 + helioviewer.org#707 — revert before merge
+          helioviewer-org-ref: refs/pull/707/head
+          api-ref: refs/pull/478/head
           helioviewer-tests-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_pr != '' && format('refs/pull/{0}/head', github.event.inputs.test_pr) || github.ref}}
           shard-index: ${{ matrix.shardIndex }}
           shard-total: ${{ matrix.shardTotal }}
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed.
-    # Skip on pull requests since e2e tests don't run
-    if: ${{ !cancelled() && github.event_name != 'pull_request' }}
+    if: ${{ !cancelled() }}
     needs: [playwright-e2e-tests]
     runs-on: ubuntu-latest
     steps:
