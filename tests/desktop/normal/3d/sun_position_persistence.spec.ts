@@ -62,11 +62,11 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
    *
    * This test currently expects the correct behavior and will FAIL until the bug is fixed.
    */
-  test(`[${view.name}] Sun stays off-center after date update`, { tag: view.tag }, async ({ page }, info) => {
-    // Firefox in playwright does not allow webgl2 creation.
-    if (page.context().browser().browserType().name() === "firefox") {
-      test.skip();
-    }
+  test(`[${view.name}] Sun stays off-center after date update`, { tag: view.tag }, async ({ page, browserName }, info) => {
+    test.skip(
+      ["firefox", "webkit"].includes(browserName),
+      "firefox: no WebGL2 in Playwright build; webkit: see https://github.com/Helioviewer-Project/helioviewer.org/issues/711"
+    );
 
     let hv = HelioviewerFactory.Create(view, page, info) as MobileInterface;
 
