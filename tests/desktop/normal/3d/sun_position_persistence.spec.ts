@@ -62,50 +62,54 @@ async function Initialize3D(hv: MobileInterface, page: Page) {
    *
    * This test currently expects the correct behavior and will FAIL until the bug is fixed.
    */
-  test(`[${view.name}] Sun stays off-center after date update`, { tag: view.tag }, async ({ page, browserName }, info) => {
-    test.skip(
-      ["firefox", "webkit"].includes(browserName),
-      "firefox: no WebGL2 in Playwright build; webkit: see https://github.com/Helioviewer-Project/helioviewer.org/issues/711"
-    );
+  test(
+    `[${view.name}] Sun stays off-center after date update`,
+    { tag: view.tag },
+    async ({ page, browserName }, info) => {
+      test.skip(
+        ["firefox", "webkit"].includes(browserName),
+        "firefox: no WebGL2 in Playwright build; webkit: see https://github.com/Helioviewer-Project/helioviewer.org/issues/711"
+      );
 
-    let hv = HelioviewerFactory.Create(view, page, info) as MobileInterface;
+      let hv = HelioviewerFactory.Create(view, page, info) as MobileInterface;
 
-    // Initialize 3D mode
-    await Initialize3D(hv, page);
+      // Initialize 3D mode
+      await Initialize3D(hv, page);
 
-    // Perform right-click drag to move sun off-center
-    const centerX = page.viewportSize().width / 2;
-    const centerY = page.viewportSize().height / 2;
+      // Perform right-click drag to move sun off-center
+      const centerX = page.viewportSize().width / 2;
+      const centerY = page.viewportSize().height / 2;
 
-    // Move to center and perform right-click drag
-    await page.mouse.move(centerX, centerY);
-    await page.mouse.down({ button: "right" });
-    await page.mouse.move(centerX + 150, centerY - 100);
-    // Click and drag is animated, so need to wait for the animation
-    // to finish before releasing right mouse, otherwise the animation
-    // ends in a non-deterministic position. Meaning the image always
-    // ends up in a different place each run.
-    await page.waitForTimeout(1000);
-    await page.mouse.up({ button: "right" });
+      // Move to center and perform right-click drag
+      await page.mouse.move(centerX, centerY);
+      await page.mouse.down({ button: "right" });
+      await page.mouse.move(centerX + 150, centerY - 100);
+      // Click and drag is animated, so need to wait for the animation
+      // to finish before releasing right mouse, otherwise the animation
+      // ends in a non-deterministic position. Meaning the image always
+      // ends up in a different place each run.
+      await page.waitForTimeout(1000);
+      await page.mouse.up({ button: "right" });
 
-    await expect(page).toHaveScreenshot("initial.png");
+      await expect(page).toHaveScreenshot("initial.png");
 
-    // Update observation date
-    await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 06:00:00Z"));
-    await hv.WaitForLoadingComplete();
+      // Update observation date
+      await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 06:00:00Z"));
+      await hv.WaitForLoadingComplete();
 
-    // Update observation date back to where it was
-    await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 00:00:00Z"));
-    await hv.WaitForLoadingComplete();
+      // Update observation date back to where it was
+      await hv.SetObservationDateTimeFromDate(new Date("2024-12-31 00:00:00Z"));
+      await hv.WaitForLoadingComplete();
 
-    // Wait for 3D to finish rendering
-    await page.waitForTimeout(1000);
+      // Wait for 3D to finish rendering
+      await page.waitForTimeout(1000);
 
-    // In theory this "should" be the same as initial.png, but it seems that
-    // either due to math errors or precision errors the actual result
-    // is slightly off. It is functional enough to rely on, even though
-    // it's not perfect. So compare to a separate screenshot rather than
-    // against the original.
-    await expect(page).toHaveScreenshot("after-change.png");
-  });
+      // In theory this "should" be the same as initial.png, but it seems that
+      // either due to math errors or precision errors the actual result
+      // is slightly off. It is functional enough to rely on, even though
+      // it's not perfect. So compare to a separate screenshot rather than
+      // against the original.
+      await expect(page).toHaveScreenshot("after-change.png");
+    }
+  );
 });
