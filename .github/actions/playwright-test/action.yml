@@ -14,6 +14,10 @@ inputs:
     description: 'Git ref to checkout for helioviewer.org-tests'
     required: false
     default: 'main'
+  test-repo:
+    description: 'Repository to checkout for helioviewer.org-tests'
+    required: false
+    default: 'Helioviewer-Project/helioviewer.org-tests'
   shard-index:
     description: 'Current shard index for test parallelization'
     required: true
@@ -27,7 +31,7 @@ runs:
     - name: Checkout test code
       uses: actions/checkout@v4
       with:
-        repository: 'Helioviewer-Project/helioviewer.org-tests'
+        repository: ${{ inputs.test-repo }}
         ref: ${{ inputs.helioviewer-tests-ref }}
         path: helioviewer.org-tests
 
