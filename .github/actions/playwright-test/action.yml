@@ -67,7 +67,7 @@ runs:
       working-directory: helioviewer.org-tests
       run: |
         npm ci
-        npx playwright install --with-deps
+        sudo npx playwright install --with-deps
 
     - name: Run Playwright tests
       shell: bash
