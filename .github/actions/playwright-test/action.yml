@@ -60,7 +60,7 @@ runs:
     - name: Install node
       uses: actions/setup-node@v4
       with:
-        node-version: lts/*
+        node-version: 24.15.0
 
     - name: Install Playwright Browsers
       shell: bash
