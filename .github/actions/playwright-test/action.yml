@@ -26,7 +26,7 @@ inputs:
     description: 'Git ref to checkout for helioviewer.org-docker repository'
     required: false
     default: 'main'
-  helioviewer-tests-ref:
+  test-ref:
     description: 'Git ref to checkout for helioviewer.org-tests'
     required: false
     default: 'main'
@@ -48,7 +48,7 @@ runs:
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.test-repo }}
-        ref: ${{ inputs.helioviewer-tests-ref }}
+        ref: ${{ inputs.test-ref }}
         path: helioviewer.org-tests
 
     - name: Setup Helioviewer Docker environment
