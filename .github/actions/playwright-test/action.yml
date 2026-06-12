@@ -6,8 +6,24 @@ inputs:
     description: 'Git ref to checkout for helioviewer.org'
     required: false
     default: 'main'
+  helioviewer-org-repo:
+    description: 'Repository to use for the helioviewer.org submodule (owner/repo)'
+    required: false
+    default: 'Helioviewer-Project/helioviewer.org'
   api-ref:
     description: 'Git ref to checkout for api'
+    required: false
+    default: 'main'
+  api-repo:
+    description: 'Repository to use for the api submodule (owner/repo)'
+    required: false
+    default: 'Helioviewer-Project/api'
+  docker-repo:
+    description: 'Repository to checkout for helioviewer.org-docker (owner/repo)'
+    required: false
+    default: 'Helioviewer-Project/helioviewer.org-docker'
+  docker-ref:
+    description: 'Git ref to checkout for helioviewer.org-docker repository'
     required: false
     default: 'main'
   helioviewer-tests-ref:
@@ -36,9 +52,14 @@ runs:
         path: helioviewer.org-tests
 
     - name: Setup Helioviewer Docker environment
-      uses: Helioviewer-Project/helioviewer.org-docker/.github/actions/helioviewer-docker@main
+      # TODO: Revert this back to Helioviewer-Project
+      uses: dgarciabriseno/helioviewer.org-docker/.github/actions/helioviewer-docker@gh-runner
       with:
+        docker-repo: ${{ inputs.docker-repo }}
+        docker-ref: ${{ inputs.docker-ref }}
+        helioviewer-org-repo: ${{ inputs.helioviewer-org-repo }}
         helioviewer-org-ref: ${{ inputs.helioviewer-org-ref }}
+        api-repo: ${{ inputs.api-repo }}
         api-ref: ${{ inputs.api-ref }}
 
     - name: Print current helioviewer.org commit
