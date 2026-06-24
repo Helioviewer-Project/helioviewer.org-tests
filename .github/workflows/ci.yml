@@ -56,7 +56,7 @@ jobs:
         run: npm run prettier-check
 
   playwright-e2e-tests:
-    # TEMP: hardcoded against api#478 + helioviewer.org#707 — revert before merge
+    # TEMP: PR guard removed so e2e runs on this branch's PR — restore before merge
     strategy:
       matrix:
         shardIndex: [1,2,3,4,5]
@@ -75,14 +75,15 @@ jobs:
       - name: Run Playwright tests
         uses: ./.github/actions/playwright-test
         with:
-          # TEMP: hardcoded against api#478 + helioviewer.org#707 — revert before merge
-          helioviewer-org-ref: refs/pull/707/head
-          api-ref: refs/pull/478/head
+          # TEMP: hardcoded against helioviewer.org#712 — revert before merge
+          helioviewer-org-ref: refs/pull/712/head
+          api-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.api_pr != '' && format('refs/pull/{0}/head', github.event.inputs.api_pr) || 'main' }}
           helioviewer-tests-ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.test_pr != '' && format('refs/pull/{0}/head', github.event.inputs.test_pr) || github.ref}}
           shard-index: ${{ matrix.shardIndex }}
           shard-total: ${{ matrix.shardTotal }}
   merge-reports:
     # Merge reports after playwright-tests, even if some shards have failed.
+    # TEMP: PR guard removed so merge runs on this branch's PR — restore before merge
     if: ${{ !cancelled() }}
     needs: [playwright-e2e-tests]
     runs-on: ubuntu-latest
