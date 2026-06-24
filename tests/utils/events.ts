@@ -37,7 +37,7 @@ async function mockEvents(page: Page, eventTree: EventTree): Promise<void> {
   // Iterate in event tree source trees
   for (const source in eventTree) {
     // Mock API events request to include problem data which creates bug
-    await page.route(`**/*action=events&sources=${source}*`, async (route) => {
+    await page.route(`**/*action=events&format=flat&sources=${source}*`, async (route) => {
       const newJson = [];
 
       for (const eventtype in eventTree[source]) {
@@ -73,37 +73,25 @@ async function mockEvents(page: Page, eventTree: EventTree): Promise<void> {
           "UNK"
         ].sort(() => 0.5 - Math.random())[0];
 
-        // Generate event source tree
-        newJson.push({
-          name: eventtype,
-          pin: eventTypePin,
-          groups: Object.keys(eventTree[source][eventtype]).map((frm) => {
-            return {
-              name: frm,
-              data: Object.keys(eventTree[source][eventtype][frm]).map((eventlabel) => {
-                // frm reference used with no spaces
-                const frmReference = frm.split(" ").join("");
-
-                // randomize some number to differentiate events under same frm with same event_instances
-                const randomMilliseconds: string = Math.floor(Math.random() * 1000)
-                  .toString()
-                  .padStart(3, "0");
-
-                // generate event instances
-                // Default event instance
-                const generatedEventInstance = {
-                  concept: eventtype,
-                  label: eventlabel,
-                  shortlabel: eventlabel,
-                  eventtype: "24",
-                  event_type: eventTypePin,
-                  frm_name: frm,
-                  hv_labels_formatted: {
-                    "Event Type": eventtype
-                  },
-                  type: randomEventType,
-                  id: eventlabel,
-                  active: "true",
+        // Generate flat event instances under this event type
+        for (const frm in eventTree[source][eventtype]) {
+          for (const eventlabel in eventTree[source][eventtype][frm]) {
+            // Default event instance
+            const generatedEventInstance = {
+              mocked: true,
+              path: `${source}>>${eventtype}>>${frm}`,
+              concept: eventtype,
+              label: eventlabel,
+              shortlabel: eventlabel,
+              eventtype: "24",
+              event_type: eventTypePin,
+              frm_name: frm,
+              hv_labels_formatted: {
+                "Event Type": eventtype
+              },
+              type: randomEventType,
+              id: eventlabel,
+              active: "true",
                   area_atdiskcenter: null,
                   area_atdiskcenteruncert: null,
                   area_raw: null,
@@ -258,15 +246,13 @@ async function mockEvents(page: Page, eventTree: EventTree): Promise<void> {
                   hv_hpc_y: 782.6184204061095,
                   version: "",
                   start: "2017-09-06T09:04:00",
-                  end: "2017-09-06T15:04:00"
-                };
-
-                // merge it with the given one
-                return Object.assign({}, generatedEventInstance, eventTree[source][eventtype][frm]);
-              })
+              end: "2017-09-06T15:04:00"
             };
-          })
-        });
+
+            // merge generated defaults with caller's overrides for this event
+            newJson.push(Object.assign({}, generatedEventInstance, eventTree[source][eventtype][frm][eventlabel]));
+          }
+        }
       }
 
       await route.fulfill({
