@@ -36,11 +36,16 @@ type EventTree = Record<Source, EventTypes>;
 async function mockEvents(page: Page, eventTree: EventTree): Promise<void> {
   // Iterate in event tree source trees
   for (const source in eventTree) {
-    // Mock API events request to include problem data which creates bug
-    await page.route(`**/*action=events&format=flat&sources=${source}*`, async (route) => {
-      const newJson = [];
+    // Mock API events request to return the simpletree response shape:
+    //   { "<source>>><eventtype>": [ <event>, <event>, ... ], ... }
+    // Each event instance still carries the full 3-level path
+    // "<source>>><eventtype>>><frm>".
+    await page.route(`**/*action=events&format=simpletree&sources=${source}*`, async (route) => {
+      const newJson: Record<string, object[]> = {};
 
       for (const eventtype in eventTree[source]) {
+        const groupKey = `${source}>>${eventtype}`;
+        newJson[groupKey] = [];
         // Event PIN is needed in HV, for "Active Region" our pin is "AR"
         const eventTypePin = eventtype
           .split(" ")
@@ -250,7 +255,9 @@ async function mockEvents(page: Page, eventTree: EventTree): Promise<void> {
             };
 
             // merge generated defaults with caller's overrides for this event
-            newJson.push(Object.assign({}, generatedEventInstance, eventTree[source][eventtype][frm][eventlabel]));
+            newJson[groupKey].push(
+              Object.assign({}, generatedEventInstance, eventTree[source][eventtype][frm][eventlabel])
+            );
           }
         }
       }
