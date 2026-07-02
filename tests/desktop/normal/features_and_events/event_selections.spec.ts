@@ -47,12 +47,12 @@ test("Event selections should be sync with normal flow of selections", async ({ 
           "AR SPoCA 1": {}
         }
       },
-      "Sunspot": {
+      Sunspot: {
         SPoCA: {
           "SS SPoCA 1": {}
         }
       },
-      "Eruption": {
+      Eruption: {
         SPoCA: {
           "ER SPoCA 1": {}
         }

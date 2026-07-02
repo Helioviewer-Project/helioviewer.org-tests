@@ -123,10 +123,8 @@
           "markers_visible": true,
           "labels_visible": true,
           "layer_available_visible": true,
-          "layers": [
-          ],
-          "layers_v2": [
-          ]
+          "layers": [],
+          "layers_v2": []
         },
         "tree_CCMC": {
           "id": "CCMC",
@@ -226,12 +224,7 @@
   "helioviewer.events.show_empty_branches.CCMC": true,
   "helioviewer.events.show_empty_branches.RHESSI": true,
   "helioviewer.events.show_empty_branches.HEK": true,
-  "helioviewer.events.selections.CCMC": [
-    "CCMC>>DONKI"
-  ],
+  "helioviewer.events.selections.CCMC": ["CCMC>>DONKI"],
   "helioviewer.events.selections.RHESSI": [],
-  "helioviewer.events.selections.HEK": [
-    "HEK>>CME",
-    "HEK>>Sunspot"
-  ]
+  "helioviewer.events.selections.HEK": ["HEK>>CME", "HEK>>Sunspot"]
 }

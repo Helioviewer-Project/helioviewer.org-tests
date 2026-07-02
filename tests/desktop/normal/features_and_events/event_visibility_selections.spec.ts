@@ -39,9 +39,7 @@ test("Event visibility selections should be loaded from visibility selections of
   });
 });
 
-test("Event visibility selections should be sync with normal flow of visibility changes", async ({
-  page
-}, info) => {
+test("Event visibility selections should be sync with normal flow of visibility changes", async ({ page }, info) => {
   const localStorage = readJSON(`${__dirname}/local_states/events_with_selected_event_visibilities.json`);
 
   const hv = new Helioviewer(page, info);
