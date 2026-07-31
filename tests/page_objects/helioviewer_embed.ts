@@ -1,6 +1,7 @@
 import { expect, Page, TestInfo } from "@playwright/test";
 import { Helioviewer } from "./helioviewer";
 import { EmbedInterface } from "./helioviewer_interface";
+import { applyInitLocalStorage } from "../utils/utils";
 
 /**
  * Interface for Helioviewer's Embedded view
@@ -19,7 +20,7 @@ class HelioviewerEmbed implements EmbedInterface {
     this.hv = new Helioviewer(page, info);
   }
 
-  async Load(url: string = "/"): Promise<void> {
+  async Load(url: string = "/", localStorage?: Record<string, unknown>): Promise<void> {
     // Try to add "output=embed" to the given url string.
     // If there's already a query string, then add output=embed to the end
     if (url.indexOf("?") != -1) {
@@ -30,6 +31,9 @@ class HelioviewerEmbed implements EmbedInterface {
       url = `${url}?output=embed`;
     }
 
+    if (localStorage) {
+      await applyInitLocalStorage(this.page, localStorage);
+    }
     await this.page.goto(url);
     // Wait for 4 image tiles to appear after the page loads
     await expect(this.page.locator(".tile")).toHaveCount(4);

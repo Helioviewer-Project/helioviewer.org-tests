@@ -52,8 +52,7 @@ runs:
         path: helioviewer.org-tests
 
     - name: Setup Helioviewer Docker environment
-      # TODO: Revert this back to Helioviewer-Project
-      uses: dgarciabriseno/helioviewer.org-docker/.github/actions/helioviewer-docker@gh-runner
+      uses: Helioviewer-Project/helioviewer.org-docker/.github/actions/helioviewer-docker@main
       with:
         docker-repo: ${{ inputs.docker-repo }}
         docker-ref: ${{ inputs.docker-ref }}
