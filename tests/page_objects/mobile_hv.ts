@@ -10,6 +10,7 @@ import { MobileInterface } from "./helioviewer_interface";
 import { MobileURLShare } from "./urlshare";
 import { MobileScreenshot } from "./screenshot";
 import { EventTree } from "./event_tree";
+import { applyInitLocalStorage } from "../utils/utils";
 
 class HvMobile implements MobileInterface {
   /** Helioviewer reference for shared interactions that apply to mobile and desktop */
@@ -74,13 +75,16 @@ class HvMobile implements MobileInterface {
   private async _WaitForInitialImageLayer() {
     let layerAccordion = this.page.locator("#tileLayerAccordion");
     let imageLayers = layerAccordion.locator(".dynaccordion-section");
-    await expect(imageLayers).toHaveCount(1, { timeout: 30000 });
+    await expect(imageLayers).toHaveCount(1, { timeout: 5000 });
   }
 
   /** Navigates to the mobile helioviewer page */
-  async Load(path: string = "/") {
+  async Load(path: string = "/", localStorage?: Record<string, unknown>) {
+    if (localStorage) {
+      await applyInitLocalStorage(this.page, localStorage);
+    }
     await this.page.goto(path);
-    await this.page.evaluate(() => console.log(localStorage.getItem("settings")));
+    await this.page.evaluate(() => console.log(window.localStorage.getItem("settings")));
     // Wait for the first image layer to be loaded
     await this._WaitForInitialImageLayer();
 

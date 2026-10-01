@@ -14,10 +14,16 @@ import { EventTree } from "./event_tree";
  */
 interface EmbedInterface {
   /**
-   * Loads the given page url.
+   * Loads the given page url, optionally seeding localStorage state first.
    * This function should also wait until the HV application has finished loading.
+   *
+   * @param url Path or URL to navigate to (default "/")
+   * @param localStorage Map of keys to JSON-serializable values written into
+   *                     window.localStorage BEFORE any page script runs.
+   *                     Use this to seed Helioviewer userSettings for
+   *                     predefined states (e.g. `{ settings: { state: {...} } }`).
    */
-  Load(url?: string): Promise<void>;
+  Load(url?: string, localStorage?: Record<string, unknown>): Promise<void>;
 
   /**
    * Waits for everything on the page to finish loading.

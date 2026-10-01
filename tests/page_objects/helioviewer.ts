@@ -14,6 +14,7 @@ import { ScaleIndicator } from "./scale_indicator";
 import * as fs from "fs";
 import { DesktopInterface } from "./helioviewer_interface";
 import { MouseCoordinates } from "./mouse_coordinates";
+import { applyInitLocalStorage } from "../utils/utils";
 
 /**
  * Matches an image layer selection
@@ -82,7 +83,10 @@ class Helioviewer implements DesktopInterface {
     return new EventTree(source, this.page);
   }
 
-  async Load(path: string = "/") {
+  async Load(path: string = "/", localStorage?: Record<string, unknown>) {
+    if (localStorage) {
+      await applyInitLocalStorage(this.page, localStorage);
+    }
     await this.page.goto(path);
     await this.WaitForLoadingComplete();
   }

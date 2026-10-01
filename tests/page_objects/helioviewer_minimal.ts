@@ -1,6 +1,7 @@
 import { expect, Page, TestInfo } from "@playwright/test";
 import { Helioviewer } from "./helioviewer";
 import { MinimalInterface } from "./helioviewer_interface";
+import { applyInitLocalStorage } from "../utils/utils";
 
 /**
  * Interface for Helioviewer's Embedded view
@@ -25,7 +26,7 @@ class HelioviewerMinimal implements MinimalInterface {
     return;
   }
 
-  async Load(url: string = "/"): Promise<void> {
+  async Load(url: string = "/", localStorage?: Record<string, unknown>): Promise<void> {
     // Try to add "output=embed" to the given url string.
     // If there's already a query string, then add output=embed to the end
     if (url.indexOf("?") != -1) {
@@ -36,6 +37,9 @@ class HelioviewerMinimal implements MinimalInterface {
       url = `${url}?output=minimal`;
     }
 
+    if (localStorage) {
+      await applyInitLocalStorage(this.page, localStorage);
+    }
     await this.page.goto(url);
     await expect(this.page.locator(".tile")).toHaveCount(4);
     await this.WaitForLoadingComplete();
